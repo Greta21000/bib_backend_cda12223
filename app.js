@@ -1,12 +1,29 @@
-const express = require('express')
+const express = require('express');
+const bodyParser = require('body-parser')
+const HttpError = require('./models/http-error');
 const musiquesRoutes = require('./routes/musiques-routes');
 // const filmsRoutes = require('./routes/films-routes');
 
 const app = express()
 const port = 5000
 
+app.use(bodyParser.json());
+
 app.use('/api/musiques', musiquesRoutes);
 // app.use('/api/films', filmsRoutes);
+
+app.use((req, res,next) => {
+    const error = new HttpError('Page non trouvée', 404);
+    next(error);
+})
+
+app.use((error, req, res, next) => {
+    if (res.headerSent) { //vérifier si la réponse a terminé / a été retournée
+        return next(error);
+    }
+    res.status(error.code || 500); //vérifier si un code erreur spécifique a été généré par le router
+    res.json({ message: error.message || 'Une erreur non gérée est survenue' })
+});
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`)
