@@ -1,7 +1,7 @@
 const { v4: uuidv4 } = require("uuid");
 const HttpError = require("../models/http-error");
 
-const MUSIQUES = [
+let MUSIQUES = [
   {
     id: "1",
     auteur: "Daft Punk",
@@ -86,7 +86,15 @@ const updateMusique = (req, res, next) => {
   res.status(200).json({ musique: updatedMusique });
 };
 
+const deleteMusique = (req, res, next) => {
+    const mId = req.params.musiqueid;
+    
+    MUSIQUES = MUSIQUES.filter(m => m.id !== mId   )
+    res.status(200).json({message: "Musique supprimée"});
+}
+
 exports.getMusiques = getMusiques;
 exports.getMusiqueById = getMusiqueById;
 exports.createMusique = createMusique;
 exports.updateMusique = updateMusique;
+exports.deleteMusique = deleteMusique;

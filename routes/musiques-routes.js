@@ -12,4 +12,6 @@ router.post('/', musiquesControllers.createMusique)
 
 router.patch('/:musiqueid', musiquesControllers.updateMusique)
 
+router.delete('/:musiqueid', musiquesControllers.deleteMusique)
+
 module.exports = router;
